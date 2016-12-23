@@ -1,7 +1,7 @@
 var ship;
 var ufo;
 var field;
-var lasers = [];
+//var lasers = [];
 var score;
 var fireSound;
 var hitSound;
@@ -17,7 +17,7 @@ function preload() {
     hitSound = loadSound('sounds/hit.mp3');
     thrustSound = loadSound('sounds/thrust.mp3');
     explodeSound = loadSound('sounds/exp.mp3');
-  //  doneImage = loadImage('yeah.gif');
+    //  doneImage = loadImage('yeah.gif');
 }
 
 function setup() {
@@ -25,44 +25,46 @@ function setup() {
     score = new ScoreBoard();
     ship = new Ship();
     field = new AsteriodField(5);
+    ufo = new Ufo();
 
     gamePaused = false;
     gameOver = false;
     gameTimer = 0;
-
-    //temp set up
-    //asteriods[0].explosive = true;
-    ufo = new Ufo();
 }
-
-
 
 
 function draw() {
     gameTimer += 1;
     background(0);
+
     if (!gamePaused) {
         field.update();
-        //updateLasers();
         ship.update();
         ufo.update();
     }
     field.display();
-    //lasers.forEach(drawLasers);
     ship.display();
     score.display();
     ufo.display();
 
-
+    this.progressLevel();
 }
 
+this.progressLevel = function() {
+    if (gameTimer == 3000) {
+        field.introduceExplosiveAsteriod = true;
+    }
+
+    if (gameTimer == 4000) {
+        ufo.shipLaunch();
+    }
+}
 
 function ScoreBoard() {
     this.score = 0;
 
     this.updateScore = function(amount) {
         this.score = this.score + amount;
-
     }
 
     this.checkEndOfGame = function() {
@@ -74,6 +76,14 @@ function ScoreBoard() {
     this.endGame = function() {
         console.log("game ended");
         gameOver = true;
+    }
+
+    this.convertTimerToTime = function(t) {
+        //30FPS is default for p5.js
+        var secs = gameTimer / 60;
+        var mins = (secs / 60).toFixed(0);
+        var displaySecs = (secs % 60).toFixed(2);
+        return mins + ":" + displaySecs
     }
 
     this.display = function() {
@@ -88,54 +98,15 @@ function ScoreBoard() {
             translate(width / 2, height / 2);
             text("GAME PAUSED ", 0, 0);
         } else {
-            translate(40, 25);
-            text("score " + this.score, 0, 0);
+            textAlign(LEFT);
+            translate(30, 25);
+            text("score: " + this.score + "   time: " + this.convertTimerToTime(), 0, 0);
         }
         pop();
     }
 }
-// 
-// function drawLasers(k) {
-//     k.display();
-// }
-//
-// function updateLasers() {
-//     for (var j = lasers.length - 1; j >= 0; j--) {
-//         lasers[j].update();
-//         if (lasers[j].offscreen()) {
-//             lasers.splice(j, 1);
-//         } else {
-//             for (var i = field.asteriods.length - 1; i >= 0; i--) {
-//                 if (lasers[j].hits(ufo)) {
-//                     ufo.shipHit();
-//                     score.updateScore(100);
-//                 } else {
-//
-//
-//
-//
-//                     // if (lasers[j].hits(asteriods[i])) {
-//                     //     if (asteriods[i].explosive == true) {
-//                     //         explodeAllAsteriods();
-//                     //     } else {
-//                     //         if (asteriods[i].size > 10) {
-//                     //             var newAst = asteriods[i].breakup();
-//                     //             asteriods = asteriods.concat(newAst);
-//                     //         }
-//                     //         hitSound.play();
-//                     //         asteriods.splice(i, 1);
-//                     //         lasers.splice(j, 1);
-//                     //         score.updateScore(10);
-//                     //         score.checkEndOfGame();
-//                     //         break;
-//                     //     }
-//                     // }
-//
-//                 }
-//             }
-//         }
-//     }
-// }
+
+
 
 
 function keyReleased() {
@@ -162,8 +133,8 @@ function keyPressed() {
         } else if (keyCode == UP_ARROW) {
             ship.startThrust();
         } else if (keyCode == DOWN_ARROW) {
-            ufo.shipLaunch();
-            console.log('engage ufo');
+            //ufo.shipLaunch();
+            //console.log('engage ufo');
         }
     }
 }

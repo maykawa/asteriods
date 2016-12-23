@@ -61,6 +61,7 @@ function Ufo() {
         var d = dist(this.pos.x, this.pos.y, laser.pos.x, laser.pos.y);
         if (d < (this.size)) {
             this.explode();
+            score.updateScore(100);
             return true;
         }
     }

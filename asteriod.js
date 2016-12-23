@@ -34,8 +34,6 @@ function Asteriod(pos, asize) {
         newA[1] = new Asteriod(this.pos, this.size);
         newA[1].velocity.mult(1.6);
         return newA;
-
-        console.log(newA);
     }
 
     this.keepOnScreen = function() {

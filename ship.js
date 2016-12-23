@@ -69,7 +69,7 @@ function Ship() {
                 if (field.laserHit(this.myLasers[j])) {
                     this.myLasers.splice(j, 1);
                 } else if (ufo.laserHit(this.myLasers[j])) {
-                  this.myLasers.splice(j, 1);
+                    this.myLasers.splice(j, 1);
                 }
             }
         }
@@ -121,9 +121,6 @@ function Ship() {
         //if I collide with passed obj then boom
 
     }
-
-
-
 
     this.display = function() {
         this.drawMyLasers();

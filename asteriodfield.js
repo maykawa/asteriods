@@ -4,6 +4,7 @@ function AsteriodField(num) {
     for (var i = 0; i < this.number; i++) {
         this.asteriods.push(new Asteriod());
     }
+    this.introduceExplosiveAsteriod = false;
 
     this.update = function() {
         this.asteriods.forEach(updateAsteriods);
@@ -60,9 +61,13 @@ function AsteriodField(num) {
 
     this.asteriodBreakup = function(i) {
         if (this.asteriods[i].explosive == true) {
-            explodeAllAsteriods();
+            this.explodeAllAsteriods();
         } else if (this.asteriods[i].size > 10) {
             var newAst = this.asteriods[i].breakup();
+            if (this.introduceExplosiveAsteriod) {
+                newAst[0].explosive = true;
+                this.introduceExplosiveAsteriod = false;
+            }
             this.asteriods = this.asteriods.concat(newAst);
         }
         this.asteriods.splice(i, 1);
