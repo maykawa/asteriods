@@ -1,16 +1,11 @@
 var ship;
 var ufo;
 var field;
-//var lasers = [];
 var score;
 var fireSound;
 var hitSound;
 var explodeSound;
 var thrustSound;
-// var doneImage;
-// var gamePaused;
-// var gameOver;
-// var gameTimer;
 
 function preload() {
     fireSound = loadSound('sounds/fire3.mp3');
@@ -26,17 +21,10 @@ function setup() {
     ship = new Ship();
     field = new AsteriodField(1);
     ufo = new Ufo();
-
-    // gamePaused = false;
-    // gameOver = false;
-    // gameTimer = 0;
-    // gameWin = false;
 }
-
 
 function draw() {
     background(0);
-
     score.progressLevel();
     if (!score.gamePaused) {
         field.update();
@@ -44,12 +32,10 @@ function draw() {
         ufo.update();
     }
     field.display();
-    ship.display();
     score.display();
     ufo.display();
+    ship.display();
 }
-
-
 
 function ScoreBoard() {
     this.score = 0
@@ -65,10 +51,9 @@ function ScoreBoard() {
 
     this.progressLevel = function() {
         this.gameTimer += 1;
-
         if (!this.gameOver && !this.gameWin) {
             if (this.gameTimer == 2000) {
-                field.introduceExplosiveAsteriod = true;
+                field.introduceExplosiveAsteriod();
             }
             if (this.gameTimer == 2000) {
                 ufo.shipLaunch();
@@ -89,7 +74,7 @@ function ScoreBoard() {
     }
 
     this.convertTimerToTime = function(t) {
-        //30FPS is default for p5.js
+        //60FPS is default for p5.js
         var secs = this.gameTimer / 60;
         var mins = (secs / 60).toFixed(0);
         var displaySecs = (secs % 60).toFixed(2);
@@ -163,7 +148,6 @@ function FireWork() {
         }
     }
 }
-
 
 function keyReleased() {
     if (keyCode == RIGHT_ARROW || keyCode == LEFT_ARROW) {

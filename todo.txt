@@ -1,0 +1,6 @@
+add levels which alters the number of asteriods
+add sound for ufo
+create multiple ufos
+create shield for ship
+create start screen
+save high score??
