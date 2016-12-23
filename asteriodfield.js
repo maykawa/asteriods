@@ -36,11 +36,11 @@ function AsteriodField(num) {
     }
 
 
-    this.checkArray = function() {
-        for (var i = 0; i < this.asteriods.length; i++) {
-            console.log(this.asteriods[i]);
-        }
-    }
+    // this.checkArray = function() {
+    //     for (var i = 0; i < this.asteriods.length; i++) {
+    //         console.log(this.asteriods[i]);
+    //     }
+    // }
 
     this.checkForCollision = function(obj) {
         for (var i = 0; i < this.asteriods.length; i++) {
@@ -52,12 +52,26 @@ function AsteriodField(num) {
         return false;
     }
 
+    this.laserHit = function(laser) {
+        for (var i = this.asteriods.length - 1; i >= 0; i--) {
+            var d = dist(this.asteriods[i].pos.x, this.asteriods[i].pos.y, laser.pos.x, laser.pos.y);
+            if (d < (this.asteriods[i].size)) {
+                hitSound.play();
+                this.asteriodBreakup(i);
+                score.updateScore(10);
+                score.checkEndOfGame();
+                return true;
+            }
+        }
+    }
 
-
-
-
-
-
-
-
+    this.asteriodBreakup = function(i) {
+        if (this.asteriods[i].explosive == true) {
+            explodeAllAsteriods();
+        } else if (this.asteriods[i].size > 10) {
+            var newAst = this.asteriods[i].breakup();
+            this.asteriods = this.asteriods.concat(newAst);
+        }
+        this.asteriods.splice(i, 1);
+    }
 }

@@ -65,6 +65,10 @@ function Ship() {
             this.myLasers[j].update();
             if (this.myLasers[j].offscreen()) {
                 this.myLasers.splice(j, 1);
+            } else {
+              if (field.laserHit(this.myLasers[j])){
+                this.myLasers.splice(j, 1);
+              }
             }
         }
     }
@@ -102,6 +106,14 @@ function Ship() {
             this.myLasers[i].display();
         }
     }
+
+this.LaserHitMe = function(obj){
+//if I collide with passed obj then boom
+
+}
+
+
+
 
     this.display = function() {
         this.drawMyLasers();
