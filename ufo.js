@@ -18,8 +18,7 @@ function Ufo() {
 
     this.update = function() {
         if (!this.waiting && this.isOffScreen()) {
-            this.pos = createVector(-this.size, random(30, height - 30));
-            this.waiting = true;
+            this.resetUfo();
         } else if (!this.waiting && !this.crashed) {
             this.moveShip();
             this.updateMyLasers();
@@ -27,17 +26,13 @@ function Ufo() {
             this.shipChangeCourse();
         } else if (this.crashed) {
             this.velocity.mult(0.95);
+            this.moveShip();
         }
     }
 
-    this.shipChangeCourse = function() {
-        if (this.courseChangeTimer > 100) {
-            this.heading = random(-TWO_PI / 8, TWO_PI / 8);
-            this.courseChangeTimer = 0;
-        } else {
-            this.courseChangeTimer += 1;
-        }
-
+    this.resetUfo = function() {
+        this.pos = createVector(-this.size, random(30, height - 30));
+        this.waiting = true;
     }
 
     this.moveShip = function() {
@@ -45,15 +40,6 @@ function Ufo() {
         var force = p5.Vector.fromAngle(this.heading);
         this.velocity.add(force);
         this.velocity.limit(2);
-    }
-
-    this.fireLaser = function() {
-        if (this.fireTimer > 20) {
-            this.shootLaser();
-            this.fireTimer = 0;
-        } else {
-            this.fireTimer += 1;
-        }
     }
 
     this.updateMyLasers = function() {
@@ -88,14 +74,29 @@ function Ufo() {
         }
     }
 
+    this.fireLaser = function() {
+        if (this.fireTimer > 20) {
+            this.shootLaser();
+            this.fireTimer = 0;
+        } else {
+            this.fireTimer += 1;
+        }
+    }
+
     this.shootLaser = function() {
         var angle = random(0, TWO_PI);
-        // var distAwayFromShip = this.size * 2; //offset
-        // var x = distAwayFromShip * cos(angle);
-        // var y = distAwayFromShip * sin(angle);
-        // var launchPos = createVector(this.pos.x + x, this.pos.y + y);
         var launchPos = createVector(this.pos.x, this.pos.y);
         this.myLasers.push(new Laser(launchPos, angle));
+    }
+
+    this.shipChangeCourse = function() {
+        if (this.courseChangeTimer > 100) {
+            this.heading = random(-TWO_PI / 8, TWO_PI / 8);
+            this.courseChangeTimer = 0;
+        } else {
+            this.courseChangeTimer += 1;
+        }
+
     }
 
     this.isOffScreen = function() {
