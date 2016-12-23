@@ -17,12 +17,12 @@ function preload() {
     hitSound = loadSound('sounds/hit.mp3');
     thrustSound = loadSound('sounds/thrust.mp3');
     explodeSound = loadSound('sounds/exp.mp3');
-    doneImage = loadImage('yeah.gif');
+  //  doneImage = loadImage('yeah.gif');
 }
 
 function setup() {
     createCanvas(windowWidth - 20, windowHeight - 20);
-    score = new scoreBoard();
+    score = new ScoreBoard();
     ship = new Ship();
     field = new AsteriodField(5);
 
@@ -43,12 +43,12 @@ function draw() {
     background(0);
     if (!gamePaused) {
         field.update();
-        updateLasers();
+        //updateLasers();
         ship.update();
         ufo.update();
     }
     field.display();
-    lasers.forEach(drawLasers);
+    //lasers.forEach(drawLasers);
     ship.display();
     score.display();
     ufo.display();
@@ -57,7 +57,7 @@ function draw() {
 }
 
 
-function scoreBoard() {
+function ScoreBoard() {
     this.score = 0;
 
     this.updateScore = function(amount) {
@@ -94,48 +94,48 @@ function scoreBoard() {
         pop();
     }
 }
-
-function drawLasers(k) {
-    k.display();
-}
-
-function updateLasers() {
-    for (var j = lasers.length - 1; j >= 0; j--) {
-        lasers[j].update();
-        if (lasers[j].offscreen()) {
-            lasers.splice(j, 1);
-        } else {
-            for (var i = field.asteriods.length - 1; i >= 0; i--) {
-                if (lasers[j].hits(ufo)) {
-                    ufo.shipHit();
-                    score.updateScore(100);
-                } else {
-
-
-
-
-                    // if (lasers[j].hits(asteriods[i])) {
-                    //     if (asteriods[i].explosive == true) {
-                    //         explodeAllAsteriods();
-                    //     } else {
-                    //         if (asteriods[i].size > 10) {
-                    //             var newAst = asteriods[i].breakup();
-                    //             asteriods = asteriods.concat(newAst);
-                    //         }
-                    //         hitSound.play();
-                    //         asteriods.splice(i, 1);
-                    //         lasers.splice(j, 1);
-                    //         score.updateScore(10);
-                    //         score.checkEndOfGame();
-                    //         break;
-                    //     }
-                    // }
-
-                }
-            }
-        }
-    }
-}
+// 
+// function drawLasers(k) {
+//     k.display();
+// }
+//
+// function updateLasers() {
+//     for (var j = lasers.length - 1; j >= 0; j--) {
+//         lasers[j].update();
+//         if (lasers[j].offscreen()) {
+//             lasers.splice(j, 1);
+//         } else {
+//             for (var i = field.asteriods.length - 1; i >= 0; i--) {
+//                 if (lasers[j].hits(ufo)) {
+//                     ufo.shipHit();
+//                     score.updateScore(100);
+//                 } else {
+//
+//
+//
+//
+//                     // if (lasers[j].hits(asteriods[i])) {
+//                     //     if (asteriods[i].explosive == true) {
+//                     //         explodeAllAsteriods();
+//                     //     } else {
+//                     //         if (asteriods[i].size > 10) {
+//                     //             var newAst = asteriods[i].breakup();
+//                     //             asteriods = asteriods.concat(newAst);
+//                     //         }
+//                     //         hitSound.play();
+//                     //         asteriods.splice(i, 1);
+//                     //         lasers.splice(j, 1);
+//                     //         score.updateScore(10);
+//                     //         score.checkEndOfGame();
+//                     //         break;
+//                     //     }
+//                     // }
+//
+//                 }
+//             }
+//         }
+//     }
+// }
 
 
 function keyReleased() {

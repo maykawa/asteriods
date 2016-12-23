@@ -9,6 +9,7 @@ function Ship() {
     this.crashed = false;
     this.playExplosion = false;
     this.explodeRing = 255;
+    this.myLasers = [];
 
     this.setRotation = function(a) {
         this.rotation = a;
@@ -27,26 +28,17 @@ function Ship() {
     this.update = function() {
         this.pos.add(this.velocity);
         this.stayOnScreen();
+
+        if (field.checkForCollision(this)) {
+            this.explode();
+        }
+
         if (this.crashed) {
             this.velocity.mult(0.95);
         } else {
-            this.heading += this.rotation;
-            if (this.thrust > 0) {
-                var force = p5.Vector.fromAngle(this.heading);
-                force.mult(this.thrust);
-                this.velocity.add(force);
-            }
-            if (field.checkForCollision(this)){
-        
-            //if (this.checkForCollision(asteriods)) {
-                this.explode();
-            }
-            // if (ufo.checkForCollision(this)){
-            //     this.explode();
-            // }
-
-
+            this.moveShip();
         }
+        this.updateMyLasers();
     }
 
     this.explode = function() {
@@ -54,23 +46,27 @@ function Ship() {
         score.endGame();
     }
 
-    // this.checkForCollision = function(objects) {
-    //     for (var j = 0; j < objects.length; j++) {
-    //         var d = dist(this.pos.x, this.pos.y, objects[j].pos.x, objects[j].pos.y);
-    //         if (d < (this.size + objects[j].size) * 0.95) {
-    //             return true;
-    //         }
-    //     }
-    //     return false;
-    // }
+    this.moveShip = function() {
+        this.heading += this.rotation;
+        if (this.thrust > 0) {
+            var force = p5.Vector.fromAngle(this.heading);
+            force.mult(this.thrust);
+            this.velocity.add(force);
+        }
+    }
 
     this.fireLaser = function() {
         fireSound.play();
-        var distAwayFromShip = this.size; //offset
-        var x = distAwayFromShip * cos(this.heading);
-        var y = distAwayFromShip * sin(this.heading);
-        var launchPos = createVector(this.pos.x + x, this.pos.y + y)
-        lasers.push(new Laser(launchPos, this.heading));
+        this.myLasers.push(new Laser(this.pos, this.heading));
+    }
+
+    this.updateMyLasers = function() {
+        for (var j = this.myLasers.length - 1; j >= 0; j--) {
+            this.myLasers[j].update();
+            if (this.myLasers[j].offscreen()) {
+                this.myLasers.splice(j, 1);
+            }
+        }
     }
 
     this.stayOnScreen = function() {
@@ -101,8 +97,14 @@ function Ship() {
         }
     }
 
+    this.drawMyLasers = function() {
+        for (var i = 0; i < this.myLasers.length; i++) {
+            this.myLasers[i].display();
+        }
+    }
 
     this.display = function() {
+        this.drawMyLasers();
         push();
         translate(this.pos.x, this.pos.y);
         rotate(this.heading);

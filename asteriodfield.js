@@ -36,26 +36,28 @@ function AsteriodField(num) {
     }
 
 
+    this.checkArray = function() {
+        for (var i = 0; i < this.asteriods.length; i++) {
+            console.log(this.asteriods[i]);
+        }
+    }
 
     this.checkForCollision = function(obj) {
         for (var i = 0; i < this.asteriods.length; i++) {
             var d = dist(this.asteriods[i].pos.x, this.asteriods[i].pos.y, obj.pos.x, obj.pos.y);
-            // console.log(d);
-            // console.log(this.asteriods[i].size );
-            console.log(i);
-            console.log(this.asteriods.length);
-            if (d < ((this.asteriods[i].size + obj.size) * 0.95)) {
+            if (d < (this.asteriods[i].size + obj.size * 0.95)) {
                 return true;
             }
-
-            //
-            // for (var j = 0; j < objects.length; j++) {
-            //     var d = dist(this.pos.x, this.pos.y, objects[j].pos.x, objects[j].pos.y);
-            //     if (d < (this.size + objects[j].size) * 0.95) {
-            //         return true;
-            //     }
-            // }
-            return false;
         }
+        return false;
     }
+
+
+
+
+
+
+
+
+
 }
