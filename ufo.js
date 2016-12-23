@@ -47,51 +47,27 @@ function Ufo() {
             this.myLasers[j].update();
             if (this.myLasers[j].offscreen() || this.isOffScreen()) {
                 this.myLasers.splice(j, 1);
+            } else {
+                if (field.laserHit(this.myLasers[j])) {
+                    this.myLasers.splice(j, 1);
+                } else if (ship.laserHit(this.myLasers[j])) {
+                    this.myLasers.splice(j, 1);
+                }
             }
         }
     }
 
-    this.checkForLaserHit = function(object) {
-        for (var j = this.myLasers.length - 1; j >= 0; j--) {
-            if (this.myLasers[j].hits(obj)) {
-                hitSound.play();
-                this.myLasers.splice(j, 1);
-            }
+    this.laserHit = function(laser) {
+        var d = dist(this.pos.x, this.pos.y, laser.pos.x, laser.pos.y);
+        if (d < (this.size)) {
+            this.explode();
+            return true;
         }
     }
 
-    // if (this.myLasers[j].hits(ship)) {
-    //     hitSound.play();
-    //     ship.explode();
-    // } else if (this.myLasers[j].hits(field)) {
-    //     hitSound.play();
-    //     this.myLasers.splice(j, 1);
-    // }
-
-
-    // for (var i = asteriods.length - 1; i >= 0; i--) {
-    //         if (this.myLasers[j].hits(field)) {
-    //             if (asteriods[i].explosive == true) {
-    //                 explodeAllAsteriods();
-    //             } else {
-    //                 if (asteriods[i].size > 10) {
-    //                     var newAst = asteriods[i].breakup();
-    //                     asteriods = asteriods.concat(newAst);
-    //                 }
-    //
-    //                 asteriods.splice(i, 1);
-    //                    score.checkEndOfGame();
-    //             }
-    //         }
-    //
-    //     }
-
-
-
-
-
-
-
+    this.explode = function() {
+        this.crashed = true;
+    }
 
     this.fireLaser = function() {
         if (this.fireTimer > 20) {
@@ -126,10 +102,6 @@ function Ufo() {
             return true
         }
         return false
-    }
-
-    this.shipHit = function() {
-        this.crashed = true;
     }
 
     this.shipLaunch = function() {

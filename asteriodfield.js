@@ -35,13 +35,6 @@ function AsteriodField(num) {
         return (this.asteriods.length < 1);
     }
 
-
-    // this.checkArray = function() {
-    //     for (var i = 0; i < this.asteriods.length; i++) {
-    //         console.log(this.asteriods[i]);
-    //     }
-    // }
-
     this.checkForCollision = function(obj) {
         for (var i = 0; i < this.asteriods.length; i++) {
             var d = dist(this.asteriods[i].pos.x, this.asteriods[i].pos.y, obj.pos.x, obj.pos.y);

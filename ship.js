@@ -66,10 +66,20 @@ function Ship() {
             if (this.myLasers[j].offscreen()) {
                 this.myLasers.splice(j, 1);
             } else {
-              if (field.laserHit(this.myLasers[j])){
-                this.myLasers.splice(j, 1);
-              }
+                if (field.laserHit(this.myLasers[j])) {
+                    this.myLasers.splice(j, 1);
+                } else if (ufo.laserHit(this.myLasers[j])) {
+                  this.myLasers.splice(j, 1);
+                }
             }
+        }
+    }
+
+    this.laserHit = function(laser) {
+        var d = dist(this.pos.x, this.pos.y, laser.pos.x, laser.pos.y);
+        if (d < (this.size)) {
+            this.explode();
+            return true;
         }
     }
 
@@ -107,10 +117,10 @@ function Ship() {
         }
     }
 
-this.LaserHitMe = function(obj){
-//if I collide with passed obj then boom
+    this.LaserHitMe = function(obj) {
+        //if I collide with passed obj then boom
 
-}
+    }
 
 
 
