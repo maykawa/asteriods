@@ -25,8 +25,5 @@ function Laser(spos, angle) {
             this.pos.x < 0 ||
             this.pos.y > height ||
             this.pos.y < 0);
-
-
-            
     }
 }

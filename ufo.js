@@ -18,10 +18,11 @@ function Ufo() {
 
     this.update = function() {
         if (!this.waiting && this.isOffScreen()) {
-            this.pos = createVector(-this.size, random(30, height - 30))
+            this.pos = createVector(-this.size, random(30, height - 30));
             this.waiting = true;
         } else if (!this.waiting && !this.crashed) {
             this.moveShip();
+            this.updateMyLasers();
             this.fireLaser();
             this.shipChangeCourse();
         } else if (this.crashed) {
@@ -30,7 +31,7 @@ function Ufo() {
     }
 
     this.shipChangeCourse = function() {
-        if (this.courseChangeTimer > 80) {
+        if (this.courseChangeTimer > 100) {
             this.heading = random(-TWO_PI / 8, TWO_PI / 8);
             this.courseChangeTimer = 0;
         } else {
@@ -55,12 +56,45 @@ function Ufo() {
         }
     }
 
+    this.updateMyLasers = function() {
+        for (var j = this.myLasers.length - 1; j >= 0; j--) {
+            this.myLasers[j].update();
+            if (this.myLasers[j].offscreen() || this.isOffScreen()) {
+                this.myLasers.splice(j, 1);
+            } else {
+                for (var i = asteriods.length - 1; i >= 0; i--) {
+                    if (this.myLasers[j].hits(ship)) {
+                        ship.explode();
+                    } else {
+                        if (this.myLasers[j].hits(asteriods[i])) {
+                            if (asteriods[i].explosive == true) {
+                                explodeAllAsteriods();
+                            } else {
+                                if (asteriods[i].size > 10) {
+                                    var newAst = asteriods[i].breakup();
+                                    asteriods = asteriods.concat(newAst);
+                                }
+                                hitSound.play();
+                                asteriods.splice(i, 1);
+                                this.myLasers.splice(j, 1);
+                                score.checkEndOfGame();
+                                break;
+                            }
+                        }
+
+                    }
+                }
+            }
+        }
+    }
+
     this.shootLaser = function() {
         var angle = random(0, TWO_PI);
-        var distAwayFromShip = this.size * 2; //offset
-        var x = distAwayFromShip * cos(angle);
-        var y = distAwayFromShip * sin(angle);
-        var launchPos = createVector(this.pos.x + x, this.pos.y + y)
+        // var distAwayFromShip = this.size * 2; //offset
+        // var x = distAwayFromShip * cos(angle);
+        // var y = distAwayFromShip * sin(angle);
+        // var launchPos = createVector(this.pos.x + x, this.pos.y + y);
+        var launchPos = createVector(this.pos.x, this.pos.y);
         this.myLasers.push(new Laser(launchPos, angle));
     }
 
@@ -92,15 +126,10 @@ function Ufo() {
             }
             this.drawExplosion();
         } else {
+            this.drawMyLasers();
             this.drawShip();
         }
     }
-
-this.drawMyLasers = function(){
-
-
-  
-}
 
     this.drawExplosion = function() {
         if (this.explodeRingColor > 0) {
@@ -114,6 +143,12 @@ this.drawMyLasers = function(){
             ellipse(0, 0, ringDia);
             pop();
             this.explodeRingColor = this.explodeRingColor - 3;
+        }
+    }
+
+    this.drawMyLasers = function() {
+        for (var i = 0; i < this.myLasers.length; i++) {
+            this.myLasers[i].display();
         }
     }
 
