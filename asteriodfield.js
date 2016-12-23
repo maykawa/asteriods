@@ -14,16 +14,16 @@ function AsteriodField(num) {
         this.asteriods.forEach(updateAsteriods);
     }
 
+    function updateAsteriods(a) {
+        a.update();
+    }
+
     this.display = function() {
         this.asteriods.forEach(drawAsteriods);
     }
 
     function drawAsteriods(a) {
         a.display();
-    }
-
-    function updateAsteriods(a) {
-        a.update();
     }
 
     this.explodeAllAsteriods = function() {
@@ -38,6 +38,7 @@ function AsteriodField(num) {
 
     this.isFieldEmpty = function() {
         return (this.asteriods.length < 1);
+        bedSound.stop();
     }
 
     this.checkForCollision = function(obj) {

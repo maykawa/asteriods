@@ -14,13 +14,11 @@ function Ufo() {
     this.courseChangeTimer = 0;
     this.fireTimer = 0;
     this.myLasers = [];
-    this.soundPlayed = false;
-    this.laserSoundPlayed = false;
-
 
     this.update = function() {
         if (!this.waiting && this.isOffScreen() || score.gameWin) {
             this.resetUfo();
+            this.stopSound();
         } else if (!this.waiting && !this.crashed) {
             this.moveShip();
             this.updateMyLasers();
@@ -30,21 +28,24 @@ function Ufo() {
         } else if (this.crashed) {
             this.velocity.mult(0.95);
             this.moveShip();
+            this.stopSound();
         }
     }
 
     this.playSound = function() {
-        if (!this.soundPlayed) {
-          ufoSound.setVolume(0.3);
-            ufoSound.loop();
-            this.soundPlayed = true;
+        if (!ufoLaserSound.isPlaying()) {
+            ufoLaserSound.setVolume(0.5);
+            ufoLaserSound.loop();
         }
+    }
+
+    this.stopSound = function() {
+        ufoLaserSound.stop();
     }
 
     this.resetUfo = function() {
         this.pos = createVector(-this.size, random(30, height - 30));
         this.waiting = true;
-        ufoSound.stop();
     }
 
     this.moveShip = function() {
@@ -79,8 +80,7 @@ function Ufo() {
     }
 
     this.explode = function() {
-        ufoSound.stop();
-        ufoLaserSound.stop()
+        this.stopSound();
         if (!this.playExplosion) {
             explodeSound.play();
             this.playExplosion = true;
@@ -89,7 +89,7 @@ function Ufo() {
     }
 
     this.fireLaser = function() {
-        if (this.fireTimer > 20) {
+        if (this.fireTimer > 25) {
             this.shootLaser();
             this.fireTimer = 0;
         } else {
@@ -98,9 +98,6 @@ function Ufo() {
     }
 
     this.shootLaser = function() {
-        ufoLaserSound.setVolume(0.5);
-        ufoLaserSound.play();
-
         var angle = random(0, TWO_PI);
         var launchPos = createVector(this.pos.x, this.pos.y);
         this.myLasers.push(new Laser(launchPos, angle));

@@ -7,8 +7,12 @@ var hitSound;
 var explodeSound;
 var thrustSound;
 var winnerSound;
-var ufoSound;
 var ufoLaserSound;
+var bedSound;
+
+var fieldSize = 6
+var explosiveAstTimer = 1000
+var ufoTimer = 4000
 
 function preload() {
     fireSound = loadSound('sounds/fire3.mp3');
@@ -16,23 +20,22 @@ function preload() {
     thrustSound = loadSound('sounds/thrust.mp3');
     explodeSound = loadSound('sounds/exp.mp3');
     winnerSound = loadSound('sounds/winner.wav');
-    ufoSound = loadSound('sounds/ufo.mp3');
     ufoLaserSound = loadSound('sounds/ufo_highpitch.wav');
-    //  doneImage = loadImage('yeah.gif');
+    bedSound = loadSound('sounds/bed.mp3');
 }
 
 function setup() {
     createCanvas(windowWidth - 20, windowHeight - 20);
     score = new ScoreBoard();
     ship = new Ship();
-    field = new AsteriodField(1);
+    field = new AsteriodField(fieldSize);
     ufo = new Ufo();
 }
 
 function draw() {
     background(0);
     score.progressLevel();
-    if (!score.gamePaused) {
+    if (score.gameStarted && !score.gamePaused) {
         field.update();
         ship.update();
         ufo.update();
@@ -46,11 +49,20 @@ function draw() {
 function ScoreBoard() {
     this.score = 0
     this.gamePaused = false;
+    this.gameStarted = false;
     this.gameOver = false;
     this.gameTimer = 0;
     this.gameWin = false;
     this.fire = new FireWorkSky();
     this.winnerSoundPlayed = false;
+
+    this.startGame = function() {
+        if (!bedSound.isPlaying()) {
+            bedSound.setVolume(0.3);
+            bedSound.loop();
+        }
+        this.gameStarted = true;
+    }
 
     this.updateScore = function(amount) {
         this.score = this.score + amount;
@@ -58,11 +70,12 @@ function ScoreBoard() {
 
     this.progressLevel = function() {
         this.gameTimer += 1;
+
         if (!this.gameOver && !this.gameWin) {
-            if (this.gameTimer == 1000) {
+            if (this.gameTimer == explosiveAstTimer) {
                 field.introduceExplosiveAsteriod();
             }
-            if (this.gameTimer == 1000) {
+            if (this.gameTimer == ufoTimer) {
                 ufo.shipLaunch();
             }
         }
@@ -72,12 +85,14 @@ function ScoreBoard() {
         if (field.isFieldEmpty()) {
             console.log('winner');
             this.gameWin = true;
+            bedSound.stop();
         }
     }
 
     this.endGame = function() {
         console.log("game ended");
         this.gameOver = true;
+        bedSound.stop();
     }
 
     this.convertTimerToTime = function(t) {
@@ -92,7 +107,10 @@ function ScoreBoard() {
         push();
         textAlign(CENTER);
         fill(255);
-        if (this.gameOver) {
+        if (!this.gameStarted) {
+            translate(width / 2, height / 3);
+            text("PRESS 'S' TO BEGIN ", 0, 0);
+        } else if (this.gameOver) {
             translate(width / 2, height / 2);
             text("GAME OVER ", 0, 0);
             text("score " + this.score, 0, 20);
@@ -171,10 +189,10 @@ function keyReleased() {
 
 function keyPressed() {
     if (keyCode == 80) {
-        this.gamePaused = !this.gamePaused;
+        score.gamePaused = !score.gamePaused;
     }
 
-    if (!this.gamePaused && !ship.crashed) {
+    if (!score.gamePaused && !ship.crashed) {
         if (key == ' ') {
             ship.fireLaser();
         } else if (keyCode == RIGHT_ARROW) {
@@ -183,7 +201,9 @@ function keyPressed() {
             ship.setRotation(-0.1);
         } else if (keyCode == UP_ARROW) {
             ship.startThrust();
-        } else if (keyCode == DOWN_ARROW) {
+        } else if (keyCode == 83) {
+            //'s' key
+            score.startGame();
             //ufo.shipLaunch();
             //console.log('engage ufo');
         }

@@ -9,3 +9,5 @@ create laserfield class to handle laser mgmt for both ship and ufo
 refactor ufo and ship from a single base class
 add gameWin sounds
 add game music bed
+
+stop music bed when window closes
