@@ -4,3 +4,8 @@ create multiple ufos
 create shield for ship
 create start screen
 save high score??
+
+create laserfield class to handle laser mgmt for both ship and ufo
+refactor ufo and ship from a single base class
+add gameWin sounds
+add game music bed

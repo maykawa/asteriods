@@ -14,25 +14,37 @@ function Ufo() {
     this.courseChangeTimer = 0;
     this.fireTimer = 0;
     this.myLasers = [];
+    this.soundPlayed = false;
+    this.laserSoundPlayed = false;
 
 
     this.update = function() {
-        if (!this.waiting && this.isOffScreen()) {
+        if (!this.waiting && this.isOffScreen() || score.gameWin) {
             this.resetUfo();
         } else if (!this.waiting && !this.crashed) {
             this.moveShip();
             this.updateMyLasers();
             this.fireLaser();
             this.shipChangeCourse();
+            this.playSound();
         } else if (this.crashed) {
             this.velocity.mult(0.95);
             this.moveShip();
         }
     }
 
+    this.playSound = function() {
+        if (!this.soundPlayed) {
+          ufoSound.setVolume(0.3);
+            ufoSound.loop();
+            this.soundPlayed = true;
+        }
+    }
+
     this.resetUfo = function() {
         this.pos = createVector(-this.size, random(30, height - 30));
         this.waiting = true;
+        ufoSound.stop();
     }
 
     this.moveShip = function() {
@@ -61,12 +73,18 @@ function Ufo() {
         var d = dist(this.pos.x, this.pos.y, laser.pos.x, laser.pos.y);
         if (d < (this.size)) {
             this.explode();
-            score.updateScore(100);
+            score.updateScore(1000);
             return true;
         }
     }
 
     this.explode = function() {
+        ufoSound.stop();
+        ufoLaserSound.stop()
+        if (!this.playExplosion) {
+            explodeSound.play();
+            this.playExplosion = true;
+        }
         this.crashed = true;
     }
 
@@ -80,6 +98,9 @@ function Ufo() {
     }
 
     this.shootLaser = function() {
+        ufoLaserSound.setVolume(0.5);
+        ufoLaserSound.play();
+
         var angle = random(0, TWO_PI);
         var launchPos = createVector(this.pos.x, this.pos.y);
         this.myLasers.push(new Laser(launchPos, angle));
@@ -112,10 +133,6 @@ function Ufo() {
 
     this.display = function() {
         if (this.crashed) {
-            if (!this.playExplosion) {
-                explodeSound.play();
-                this.playExplosion = true;
-            }
             this.drawExplosion();
         } else {
             this.drawMyLasers();

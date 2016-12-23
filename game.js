@@ -6,12 +6,18 @@ var fireSound;
 var hitSound;
 var explodeSound;
 var thrustSound;
+var winnerSound;
+var ufoSound;
+var ufoLaserSound;
 
 function preload() {
     fireSound = loadSound('sounds/fire3.mp3');
     hitSound = loadSound('sounds/hit.mp3');
     thrustSound = loadSound('sounds/thrust.mp3');
     explodeSound = loadSound('sounds/exp.mp3');
+    winnerSound = loadSound('sounds/winner.wav');
+    ufoSound = loadSound('sounds/ufo.mp3');
+    ufoLaserSound = loadSound('sounds/ufo_highpitch.wav');
     //  doneImage = loadImage('yeah.gif');
 }
 
@@ -44,6 +50,7 @@ function ScoreBoard() {
     this.gameTimer = 0;
     this.gameWin = false;
     this.fire = new FireWorkSky();
+    this.winnerSoundPlayed = false;
 
     this.updateScore = function(amount) {
         this.score = this.score + amount;
@@ -52,10 +59,10 @@ function ScoreBoard() {
     this.progressLevel = function() {
         this.gameTimer += 1;
         if (!this.gameOver && !this.gameWin) {
-            if (this.gameTimer == 2000) {
+            if (this.gameTimer == 1000) {
                 field.introduceExplosiveAsteriod();
             }
-            if (this.gameTimer == 2000) {
+            if (this.gameTimer == 1000) {
                 ufo.shipLaunch();
             }
         }
@@ -91,6 +98,10 @@ function ScoreBoard() {
             text("score " + this.score, 0, 20);
         } else if (this.gameWin) {
             translate(width / 2, height / 2);
+            if (!this.winnerSoundPlayed) {
+                winnerSound.play();
+                this.winnerSoundPlayed = true;
+            }
             this.fire.display();
             text("YOU WIN !! ", 0, 0);
             text("score " + this.score, 0, 20);
