@@ -13,6 +13,7 @@ function Ufo() {
 
     this.courseChangeTimer = 0;
     this.fireTimer = 0;
+    this.myLasers = [];
 
 
     this.update = function() {
@@ -60,7 +61,7 @@ function Ufo() {
         var x = distAwayFromShip * cos(angle);
         var y = distAwayFromShip * sin(angle);
         var launchPos = createVector(this.pos.x + x, this.pos.y + y)
-        lasers.push(new Laser(launchPos, angle));
+        this.myLasers.push(new Laser(launchPos, angle));
     }
 
     this.isOffScreen = function() {
@@ -94,6 +95,12 @@ function Ufo() {
             this.drawShip();
         }
     }
+
+this.drawMyLasers = function(){
+
+
+  
+}
 
     this.drawExplosion = function() {
         if (this.explodeRingColor > 0) {
