@@ -47,32 +47,51 @@ function Ufo() {
             this.myLasers[j].update();
             if (this.myLasers[j].offscreen() || this.isOffScreen()) {
                 this.myLasers.splice(j, 1);
-            } else {
-                for (var i = asteriods.length - 1; i >= 0; i--) {
-                    if (this.myLasers[j].hits(ship)) {
-                        ship.explode();
-                    } else {
-                        if (this.myLasers[j].hits(asteriods[i])) {
-                            if (asteriods[i].explosive == true) {
-                                explodeAllAsteriods();
-                            } else {
-                                if (asteriods[i].size > 10) {
-                                    var newAst = asteriods[i].breakup();
-                                    asteriods = asteriods.concat(newAst);
-                                }
-                                hitSound.play();
-                                asteriods.splice(i, 1);
-                                this.myLasers.splice(j, 1);
-                                score.checkEndOfGame();
-                                break;
-                            }
-                        }
-
-                    }
-                }
             }
         }
     }
+
+    this.checkForLaserHit = function(object) {
+        for (var j = this.myLasers.length - 1; j >= 0; j--) {
+            if (this.myLasers[j].hits(obj)) {
+                hitSound.play();
+                this.myLasers.splice(j, 1);
+            }
+        }
+    }
+
+    // if (this.myLasers[j].hits(ship)) {
+    //     hitSound.play();
+    //     ship.explode();
+    // } else if (this.myLasers[j].hits(field)) {
+    //     hitSound.play();
+    //     this.myLasers.splice(j, 1);
+    // }
+
+
+    // for (var i = asteriods.length - 1; i >= 0; i--) {
+    //         if (this.myLasers[j].hits(field)) {
+    //             if (asteriods[i].explosive == true) {
+    //                 explodeAllAsteriods();
+    //             } else {
+    //                 if (asteriods[i].size > 10) {
+    //                     var newAst = asteriods[i].breakup();
+    //                     asteriods = asteriods.concat(newAst);
+    //                 }
+    //
+    //                 asteriods.splice(i, 1);
+    //                    score.checkEndOfGame();
+    //             }
+    //         }
+    //
+    //     }
+
+
+
+
+
+
+
 
     this.fireLaser = function() {
         if (this.fireTimer > 20) {
@@ -96,7 +115,6 @@ function Ufo() {
         } else {
             this.courseChangeTimer += 1;
         }
-
     }
 
     this.isOffScreen = function() {
@@ -167,5 +185,4 @@ function Ufo() {
         endShape(CLOSE);
         pop();
     }
-
 }

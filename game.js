@@ -1,13 +1,13 @@
 var ship;
 var ufo;
-var asteriods = [];
+var field;
 var lasers = [];
 var score;
 var fireSound;
 var hitSound;
 var explodeSound;
 var thrustSound;
-var doneImage;
+// var doneImage;
 var gamePaused;
 var gameOver;
 var gameTimer;
@@ -24,35 +24,30 @@ function setup() {
     createCanvas(windowWidth - 20, windowHeight - 20);
     score = new scoreBoard();
     ship = new Ship();
-    createAsteriodField(5);
+    field = new AsteriodField(5);
 
     gamePaused = false;
     gameOver = false;
     gameTimer = 0;
 
     //temp set up
-    asteriods[0].explosive = true;
+    //asteriods[0].explosive = true;
     ufo = new Ufo();
 }
 
-function createAsteriodField(number) {
-    asteriods = [];
-    for (var i = 0; i < number; i++) {
-        asteriods.push(new Asteriod());
-    }
-}
+
 
 
 function draw() {
     gameTimer += 1;
     background(0);
     if (!gamePaused) {
-        asteriods.forEach(updateAsteriods);
+        field.update();
         updateLasers();
         ship.update();
         ufo.update();
     }
-    asteriods.forEach(drawAsteriods);
+    field.display();
     lasers.forEach(drawLasers);
     ship.display();
     score.display();
@@ -71,7 +66,7 @@ function scoreBoard() {
     }
 
     this.checkEndOfGame = function() {
-        if (asteriods.length < 1) {
+        if (field.isFieldEmpty()) {
             this.endGame();
         }
     }
@@ -100,16 +95,6 @@ function scoreBoard() {
     }
 }
 
-
-
-function drawAsteriods(a) {
-    a.display();
-}
-
-function updateAsteriods(a) {
-    a.update();
-}
-
 function drawLasers(k) {
     k.display();
 }
@@ -120,43 +105,35 @@ function updateLasers() {
         if (lasers[j].offscreen()) {
             lasers.splice(j, 1);
         } else {
-            for (var i = asteriods.length - 1; i >= 0; i--) {
+            for (var i = field.asteriods.length - 1; i >= 0; i--) {
                 if (lasers[j].hits(ufo)) {
                     ufo.shipHit();
                     score.updateScore(100);
-                } else if (lasers[j].hits(ship)) {
-                    ship.explode();
                 } else {
-                    if (lasers[j].hits(asteriods[i])) {
-                        if (asteriods[i].explosive == true) {
-                            explodeAllAsteriods();
-                        } else {
-                            if (asteriods[i].size > 10) {
-                                var newAst = asteriods[i].breakup();
-                                asteriods = asteriods.concat(newAst);
-                            }
-                            hitSound.play();
-                            asteriods.splice(i, 1);
-                            lasers.splice(j, 1);
-                            score.updateScore(10);
-                            score.checkEndOfGame();
-                            break;
-                        }
-                    }
+
+
+
+
+                    // if (lasers[j].hits(asteriods[i])) {
+                    //     if (asteriods[i].explosive == true) {
+                    //         explodeAllAsteriods();
+                    //     } else {
+                    //         if (asteriods[i].size > 10) {
+                    //             var newAst = asteriods[i].breakup();
+                    //             asteriods = asteriods.concat(newAst);
+                    //         }
+                    //         hitSound.play();
+                    //         asteriods.splice(i, 1);
+                    //         lasers.splice(j, 1);
+                    //         score.updateScore(10);
+                    //         score.checkEndOfGame();
+                    //         break;
+                    //     }
+                    // }
 
                 }
             }
         }
-    }
-}
-
-function explodeAllAsteriods() {
-    for (var i = asteriods.length - 1; i >= 0; i--) {
-        if (asteriods[i].size > 10) {
-            var newAst = asteriods[i].breakup();
-            asteriods = asteriods.concat(newAst);
-        }
-        asteriods.splice(i, 1);
     }
 }
 

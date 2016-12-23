@@ -36,9 +36,16 @@ function Ship() {
                 force.mult(this.thrust);
                 this.velocity.add(force);
             }
-            if (this.checkForCollision(asteriods)) {
+            if (field.checkForCollision(this)){
+        
+            //if (this.checkForCollision(asteriods)) {
                 this.explode();
             }
+            // if (ufo.checkForCollision(this)){
+            //     this.explode();
+            // }
+
+
         }
     }
 
@@ -47,15 +54,15 @@ function Ship() {
         score.endGame();
     }
 
-    this.checkForCollision = function(objects) {
-        for (var j = 0; j < objects.length; j++) {
-            var d = dist(this.pos.x, this.pos.y, objects[j].pos.x, objects[j].pos.y);
-            if (d < (this.size + objects[j].size) * 0.95) {
-                return true;
-            }
-        }
-        return false;
-    }
+    // this.checkForCollision = function(objects) {
+    //     for (var j = 0; j < objects.length; j++) {
+    //         var d = dist(this.pos.x, this.pos.y, objects[j].pos.x, objects[j].pos.y);
+    //         if (d < (this.size + objects[j].size) * 0.95) {
+    //             return true;
+    //         }
+    //     }
+    //     return false;
+    // }
 
     this.fireLaser = function() {
         fireSound.play();
