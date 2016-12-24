@@ -10,9 +10,9 @@ var winnerSound;
 var ufoLaserSound;
 var bedSound;
 
-var fieldSize = 6
+var fieldSize = 10
 var explosiveAstTimer = 1000
-var ufoTimer = 4000
+var ufoTimer = 3000
 
 function preload() {
     fireSound = loadSound('sounds/fire3.mp3');
