@@ -11,3 +11,8 @@ add gameWin sounds
 add game music bed
 
 stop music bed when window closes
+
+
+priorities
+new laser field on new branch
+merge into master
