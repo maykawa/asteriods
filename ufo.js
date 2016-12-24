@@ -13,7 +13,8 @@ function Ufo() {
 
     this.courseChangeTimer = 0;
     this.fireTimer = 0;
-    this.myLasers = [];
+    this.myLaserField = new LaserField();
+
 
     this.update = function() {
         if (!this.waiting && this.isOffScreen() || score.gameWin) {
@@ -21,7 +22,8 @@ function Ufo() {
             this.stopSound();
         } else if (!this.waiting && !this.crashed) {
             this.moveShip();
-            this.updateMyLasers();
+            //this.updateMyLasers();
+            //this.myLaserField.updateMyLasers();
             this.fireLaser();
             this.shipChangeCourse();
             this.playSound();
@@ -30,6 +32,7 @@ function Ufo() {
             this.moveShip();
             this.stopSound();
         }
+        this.myLaserField.updateMyLasers();
     }
 
     this.playSound = function() {
@@ -55,21 +58,6 @@ function Ufo() {
         this.velocity.limit(2);
     }
 
-    this.updateMyLasers = function() {
-        for (var j = this.myLasers.length - 1; j >= 0; j--) {
-            this.myLasers[j].update();
-            if (this.myLasers[j].offscreen() || this.isOffScreen()) {
-                this.myLasers.splice(j, 1);
-            } else {
-                if (field.laserHit(this.myLasers[j])) {
-                    this.myLasers.splice(j, 1);
-                } else if (ship.laserHit(this.myLasers[j])) {
-                    this.myLasers.splice(j, 1);
-                }
-            }
-        }
-    }
-
     this.laserHit = function(laser) {
         var d = dist(this.pos.x, this.pos.y, laser.pos.x, laser.pos.y);
         if (d < (this.size)) {
@@ -90,17 +78,11 @@ function Ufo() {
 
     this.fireLaser = function() {
         if (this.fireTimer > 25) {
-            this.shootLaser();
+            this.myLaserField.shootLaser(this.pos);
             this.fireTimer = 0;
         } else {
             this.fireTimer += 1;
         }
-    }
-
-    this.shootLaser = function() {
-        var angle = random(0, TWO_PI);
-        var launchPos = createVector(this.pos.x, this.pos.y);
-        this.myLasers.push(new Laser(launchPos, angle));
     }
 
     this.shipChangeCourse = function() {
@@ -132,7 +114,7 @@ function Ufo() {
         if (this.crashed) {
             this.drawExplosion();
         } else {
-            this.drawMyLasers();
+            this.myLaserField.drawMyLasers();
             this.drawShip();
         }
     }
@@ -149,12 +131,6 @@ function Ufo() {
             ellipse(0, 0, ringDia);
             pop();
             this.explodeRingColor = this.explodeRingColor - 3;
-        }
-    }
-
-    this.drawMyLasers = function() {
-        for (var i = 0; i < this.myLasers.length; i++) {
-            this.myLasers[i].display();
         }
     }
 
