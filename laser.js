@@ -51,7 +51,6 @@ function LaserField(source) {
     }
 }
 
-
 function Laser(spos, angle, src) {
     this.laserSource = src;
     this.myLaserSpeed = 6;
@@ -73,7 +72,7 @@ function Laser(spos, angle, src) {
                 point(this.pos.x - (i * cos(angle)), this.pos.y - (i * sin(angle)));
             }
         } else if (this.laserSource == 2) {
-            stroke(255);
+            stroke(103, 248, 91);
             point(this.pos.x, this.pos.y);
         }
         pop();

@@ -28,8 +28,8 @@ function setup() {
     createCanvas(windowWidth - 20, windowHeight - 20);
 
     fieldSize = 10;
-    explosiveAstTimer = floor(random(500, 1200));
-    ufoTimer = floor(random(1000, 2000));
+    explosiveAstTimer = floor(random(700, 1200));
+    ufoTimer = floor(random(1200, 2000));
 
     score = new ScoreBoard();
     ship = new Ship();
