@@ -10,7 +10,7 @@ function Ship() {
     this.playExplosion = false;
     this.explodeRing = 255;
     this.myLasers = [];
-    this.myLaserField = new LaserField();
+    this.myLaserField = new LaserField(1);
 
     this.update = function() {
         this.pos.add(this.velocity);
@@ -114,6 +114,7 @@ function Ship() {
         } else {
             triangle(-this.size, -this.size, this.size, 0, -this.size, this.size);
             line(-this.size - 3, -this.size + 4, -this.size - 3, this.size - 4);
+
             if (this.thrust > 0 && !this.crashed) {
                 noStroke();
                 fill(255, 150);

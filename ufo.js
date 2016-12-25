@@ -13,7 +13,7 @@ function Ufo() {
 
     this.courseChangeTimer = 0;
     this.fireTimer = 0;
-    this.myLaserField = new LaserField();
+    this.myLaserField = new LaserField(2);
 
 
     this.update = function() {
