@@ -1,11 +1,11 @@
 function Asteriod(pos, asize) {
-    if (pos) {
+    if (pos != undefined) {
         this.pos = pos.copy();
     } else {
         this.pos = createVector(random(width), random(height));
     }
 
-    if (asize) {
+    if (asize != undefined) {
         this.size = asize * 0.5;
     } else {
         this.size = floor(random(20, 50)); //overall size
@@ -26,13 +26,12 @@ function Asteriod(pos, asize) {
         this.keepOnScreen();
     }
 
-
     this.breakup = function() {
         var newA = [];
         newA[0] = new Asteriod(this.pos, this.size);
-        newA[0].velocity.mult(1.9);
+        newA[0].velocity.mult(random(1.8, 2.1));
         newA[1] = new Asteriod(this.pos, this.size);
-        newA[1].velocity.mult(1.6);
+        newA[1].velocity.mult(random(1.4, 1.9));
         return newA;
     }
 
@@ -53,12 +52,13 @@ function Asteriod(pos, asize) {
         push();
         translate(this.pos.x, this.pos.y);
         noFill();
+        strokeWeight(1);
 
         if (this.explosive) {
             stroke(200, 50, 200);
         } else {
             stroke(this.astColor);
-            strokeWeight(1);
+
         }
         beginShape();
         for (var i = 0; i < this.facets; i++) {
