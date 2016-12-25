@@ -29,7 +29,8 @@ function setup() {
 
     fieldSize = 10;
     explosiveAstTimer = floor(random(500, 1200));
-    ufoTimer = floor(random(1000, 2000));
+    //ufoTimer = floor(random(1000, 2000));
+    ufoTimer = 500;
 
     score = new ScoreBoard();
     ship = new Ship();

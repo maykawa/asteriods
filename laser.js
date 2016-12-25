@@ -1,10 +1,19 @@
 function LaserField() {
-
     this.myLasers = [];
 
-    this.shootLaser = function(pos) {
-        var angle = random(0, TWO_PI);
-        var launchPos = createVector(pos.x, pos.y);
+    this.shootLaser = function(pos, heading) {
+        if (heading != undefined) {
+            var angle = heading;
+        } else {
+            var angle = random(0, TWO_PI);
+        }
+
+        //offset from vehicles
+        var xr = 17;
+        var yr = 17;
+        var x = xr * cos(angle);
+        var y = yr * sin(angle);
+        var launchPos = createVector(pos.x + x, pos.y + y);
         this.myLasers.push(new Laser(launchPos, angle));
     }
 
@@ -19,16 +28,18 @@ function LaserField() {
         }
     }
 
+    this.removeLaser = function(index) {
+        this.myLasers.splice(index, 1);
+    }
+
     this.notifyOthers = function(index) {
         if (field.laserHit(this.myLasers[index])) {
             this.removeLaser(index);
         } else if (ship.laserHit(this.myLasers[index])) {
             this.removeLaser(index);
+        } else if (ufo.laserHit(this.myLasers[index])) {
+            this.removeLaser(index);
         }
-    }
-
-    this.removeLaser = function(index) {
-        this.myLasers.splice(index, 1);
     }
 
     this.drawMyLasers = function() {
@@ -40,9 +51,10 @@ function LaserField() {
 
 
 function Laser(spos, angle) {
+    this.myLaserSpeed = 6;
     this.pos = createVector(spos.x, spos.y);
     this.velocity = p5.Vector.fromAngle(angle);
-    this.velocity.mult(6);
+    this.velocity.mult(this.myLaserSpeed);
 
     this.update = function() {
         this.pos.add(this.velocity);

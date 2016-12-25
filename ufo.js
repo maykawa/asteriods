@@ -22,8 +22,6 @@ function Ufo() {
             this.stopSound();
         } else if (!this.waiting && !this.crashed) {
             this.moveShip();
-            //this.updateMyLasers();
-            //this.myLaserField.updateMyLasers();
             this.fireLaser();
             this.shipChangeCourse();
             this.playSound();

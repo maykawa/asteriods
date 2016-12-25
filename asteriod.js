@@ -26,13 +26,12 @@ function Asteriod(pos, asize) {
         this.keepOnScreen();
     }
 
-
     this.breakup = function() {
         var newA = [];
         newA[0] = new Asteriod(this.pos, this.size);
-        newA[0].velocity.mult(1.9);
+        newA[0].velocity.mult(random(1.5,2.0);
         newA[1] = new Asteriod(this.pos, this.size);
-        newA[1].velocity.mult(1.6);
+        newA[1].velocity.mult(random(0.5,1.5);
         return newA;
     }
 

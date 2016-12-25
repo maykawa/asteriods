@@ -15,11 +15,7 @@ function ScoreBoard() {
         }
         this.gameStarted = true;
     }
-
-    this.updateScore = function(amount) {
-        this.score = this.score + amount;
-    }
-
+    
     this.progressLevel = function() {
         this.gameTimer += 1;
 
@@ -45,6 +41,10 @@ function ScoreBoard() {
         console.log("game ended");
         this.gameOver = true;
         bedSound.stop();
+    }
+
+    this.updateScore = function(amount) {
+        this.score = this.score + amount;
     }
 
     this.convertTimerToTime = function(t) {
