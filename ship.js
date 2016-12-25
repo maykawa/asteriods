@@ -138,6 +138,7 @@ function Ship() {
             this.drawExplosion();
         } else {
             triangle(-this.size, -this.size, this.size, 0, -this.size, this.size);
+            line(-this.size -3, -this.size+4, -this.size-3, this.size-4);
             if (this.thrust > 0 && !this.crashed) {
                 noStroke();
                 fill(255, 150);
