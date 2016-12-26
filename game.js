@@ -10,10 +10,6 @@ var winnerSound;
 var ufoLaserSound;
 var bedSound;
 
-var fieldSize;
-var explosiveAstTimer;
-var ufoTimer;
-
 function preload() {
     fireSound = loadSound('sounds/fire3.mp3');
     hitSound = loadSound('sounds/hit.mp3');
@@ -31,7 +27,7 @@ function setup() {
     explosiveAstTimer = floor(random(700, 1200));
     ufoTimer = floor(random(1200, 2000));
 
-    score = new ScoreBoard();
+    score = new ScoreBoard(); //starts a new game
     ship = new Ship();
     field = new AsteriodField(fieldSize);
     ufo = new Ufo();
