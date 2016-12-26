@@ -7,6 +7,16 @@ function ScoreBoard() {
     this.gameWin = false;
     this.fire = new FireWorkSky();
     this.winnerSoundPlayed = false;
+    this.gameLevel = 1;
+
+    var fieldSize;
+    var explosiveAstTimer;
+    var ufoTimer;
+
+    fieldSize = 10;
+    explosiveAstTimer = floor(random(700, 1200));
+    ufoTimer = floor(random(1200, 2000));
+
 
     this.startGame = function() {
         if (!bedSound.isPlaying()) {
@@ -15,7 +25,7 @@ function ScoreBoard() {
         }
         this.gameStarted = true;
     }
-    
+
     this.progressLevel = function() {
         this.gameTimer += 1;
 
@@ -27,6 +37,16 @@ function ScoreBoard() {
                 ufo.shipLaunch();
             }
         }
+    }
+
+
+    this.startNextLevel = function() {
+        //update game level -> increases number of asteriods
+
+        //clear out old asteriod field
+
+        //create new ufo
+
     }
 
     this.checkEndOfGame = function() {
