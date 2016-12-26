@@ -36,6 +36,27 @@ function AsteriodField(num) {
         }
     }
 
+    this.launchPanicBomb = function(locale) {
+        for (var i = this.asteriods.length - 1; i >= 0; i--) {
+            //figure out if it is close to ship, then delete it
+            var d = dist(this.asteriods[i].pos.x, this.asteriods[i].pos.y, locale.x, locale.y);
+            if (d < (ship.size * 20)) {
+
+                if (this.asteriods[i].size > 10) {
+                    if (this.asteriods[i].explosive == true) {
+                        this.explodeAllAsteriods();
+                    } else {
+                        var newAst = this.asteriods[i].breakup();
+                        this.asteriods = this.asteriods.concat(newAst);
+                    }
+                }
+                hitSound.play();
+                this.asteriods.splice(i, 1);
+                score.checkEndOfGame();
+            }
+        }
+    }
+
     this.isFieldEmpty = function() {
         return (this.asteriods.length < 1);
         bedSound.stop();
@@ -54,7 +75,7 @@ function AsteriodField(num) {
     this.laserHit = function(laser) {
         for (var i = this.asteriods.length - 1; i >= 0; i--) {
             var d = dist(this.asteriods[i].pos.x, this.asteriods[i].pos.y, laser.pos.x, laser.pos.y);
-            if (d < (this.asteriods[i].size)) {
+            if (d < (this.asteriods[i].size * 1.10)) {
                 hitSound.play();
                 this.asteriodBreakup(i);
                 score.updateScore(10);

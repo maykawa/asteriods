@@ -1,21 +1,28 @@
-add levels which alters the number of asteriods
-add sound for ufo
-create multiple ufos
-create shield for ship
-create start screen
-save high score??
 
-create laserfield class to handle laser mgmt for both ship and ufo
-refactor ufo and ship from a single base class
-add gameWin sounds
-add game music bed
+create game levels
 
-stop music bed when window closes
+refactor ufo and ship from a vehicle prototype
+refactor laserfield from a field prototytpe
+
+create splash screen
 
 
-priorities
-new laser field on new branch
-merge into master
 
+/*get the logic figured out
+level 1: starting a game
+level 2: next level which increments field density and other things
 
-change the master one morer time
+each level has
+  field dnesity,
+  ufo timing,
+  explosive rock timeing
+  special lasers
+  warp drive
+  2x score asteriods
+
+tools
+targets
+  timeing
+  points
+
+*/

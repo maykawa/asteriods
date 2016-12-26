@@ -11,6 +11,9 @@ function Ship() {
     this.explodeRing = 255;
     this.myLasers = [];
     this.myLaserField = new LaserField(1);
+    this.panicBomb = true;
+    this.showPanicRing = false;
+    this.panicRing = 300;
 
     this.update = function() {
         this.pos.add(this.velocity);
@@ -31,6 +34,15 @@ function Ship() {
     this.explode = function() {
         this.crashed = true;
         score.endGame();
+    }
+
+    this.usePanicBomb = function() {
+        if (this.panicBomb) {
+            field.launchPanicBomb(this.pos);
+            this.showPanicRing = true;
+            this.panicRing = 300;
+            //this.panicBomb = false;
+        }
     }
 
     this.moveShip = function() {
@@ -83,6 +95,19 @@ function Ship() {
         }
     }
 
+    this.drawPanicRing = function() {
+        if (this.panicRing > 0) {
+            push()
+            fill(this.shipColor, 0, 0, 250)
+            stroke(this.shipColor, 0, 0);
+            strokeWeight(1);
+            ellipse(0, 0, ship.size * 20);
+            pop();
+            this.panicRing = this.panicRing - 10;
+        }
+    }
+
+
     this.setRotation = function(a) {
         this.rotation = a;
     }
@@ -104,6 +129,10 @@ function Ship() {
         rotate(this.heading);
         fill(0);
         stroke(this.shipColor);
+
+        if (this.showPanicRing) {
+            this.drawPanicRing()
+        }
 
         if (this.crashed) {
             if (!this.playExplosion) {

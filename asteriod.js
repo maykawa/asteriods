@@ -11,7 +11,8 @@ function Asteriod(pos, asize) {
         this.size = floor(random(20, 50)); //overall size
     }
 
-    this.facets = floor(random(7, 15)); //number of sides
+    //create the number of sides and the offset
+    this.facets = floor(random(7, 12));
     this.offset = [];
     for (var i = 0; i < this.facets; i++) {
         this.offset[i] = random(-this.size * 0.5, this.size * 0.5);
