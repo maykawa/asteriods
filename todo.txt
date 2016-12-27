@@ -7,22 +7,21 @@ refactor laserfield from a field prototytpe
 create splash screen
 
 
+refactor scoreboard big time
 
-/*get the logic figured out
-level 1: starting a game
-level 2: next level which increments field density and other things
+
 
 each level has
-  field dnesity,
+  field density,
   ufo timing,
-  explosive rock timeing
+  explosive rock timing
   special lasers
   warp drive
   2x score asteriods
 
 tools
 targets
-  timeing
+  timing
   points
 
 */
