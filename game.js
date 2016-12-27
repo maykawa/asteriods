@@ -92,6 +92,7 @@ function keyPressed() {
             ship.startThrust();
         } else if (keyCode == DOWN_ARROW) {
             //score.startNextLevel();
+            ship.reloadPanicBomb();
 
         }
     }

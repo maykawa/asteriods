@@ -11,9 +11,11 @@ function Ship() {
     this.explodeRing = 255;
     this.myLasers = [];
     this.myLaserField = new LaserField(1);
+
+    this.panicRingSize = this.size * 20;
     this.panicBomb = true;
     this.showPanicRing = false;
-    this.panicRing = 300;
+    this.panicRing = 30;
 
     this.update = function() {
         this.pos.add(this.velocity);
@@ -34,15 +36,6 @@ function Ship() {
     this.explode = function() {
         this.crashed = true;
         score.endGame();
-    }
-
-    this.usePanicBomb = function() {
-        if (this.panicBomb) {
-            field.launchPanicBomb(this.pos);
-            this.showPanicRing = true;
-            this.panicRing = 300;
-            //this.panicBomb = false;
-        }
     }
 
     this.moveShip = function() {
@@ -81,6 +74,34 @@ function Ship() {
         }
     }
 
+    this.usePanicBomb = function() {
+        if (this.panicBomb) {
+            field.launchPanicBomb(this.pos);
+            this.showPanicRing = true;
+            this.panicBomb = false;
+        }
+    }
+
+    this.reloadPanicBomb = function() {
+        this.showPanicRing = false;
+        this.panicRing = 30;
+        this.panicBomb = true;
+        console.log('panic bomb reloaded');
+    }
+
+    this.drawPanicRing = function() {
+        if (this.panicRing > 0) {
+            push()
+            fill(255, this.panicRing);
+            stroke(this.shipColor);
+            strokeWeight(1);
+            //ellipse(0, 0, 200);
+            ellipse(0, 0, this.panicRingSize);
+            pop();
+            this.panicRing = this.panicRing - 1;
+        }
+    }
+
     this.drawExplosion = function() {
         if (this.explodeRing > 0) {
             var dia = map(this.explodeRing, 255, 0, this.size * 2, 120);
@@ -94,19 +115,6 @@ function Ship() {
             this.explodeRing = this.explodeRing - 3;
         }
     }
-
-    this.drawPanicRing = function() {
-        if (this.panicRing > 0) {
-            push()
-            fill(this.shipColor, 0, 0, 250)
-            stroke(this.shipColor, 0, 0);
-            strokeWeight(1);
-            ellipse(0, 0, ship.size * 20);
-            pop();
-            this.panicRing = this.panicRing - 10;
-        }
-    }
-
 
     this.setRotation = function(a) {
         this.rotation = a;
@@ -131,7 +139,7 @@ function Ship() {
         stroke(this.shipColor);
 
         if (this.showPanicRing) {
-            this.drawPanicRing()
+            this.drawPanicRing();
         }
 
         if (this.crashed) {
