@@ -46,8 +46,8 @@ function AsteriodField(num) {
                     if (this.asteriods[i].explosive == true) {
                         this.explodeAllAsteriods();
                     } else {
-                        var newAst = this.asteriods[i].breakup();
-                        this.asteriods = this.asteriods.concat(newAst);
+                        //var newAst = this.asteriods[i].breakup();
+                        //this.asteriods = this.asteriods.concat(newAst);
                     }
                 }
                 hitSound.play();

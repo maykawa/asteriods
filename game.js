@@ -63,7 +63,7 @@ function keyReleased() {
 }
 
 function keyPressed() {
-    if (keyCode == 80) { //'p' key
+    if (keyCode == 80 && !score.gameOver) { //'p' key
         score.gamePaused = !score.gamePaused;
     }
 
@@ -77,8 +77,8 @@ function keyPressed() {
         }
     }
 
-    if (keyCode == 54){ //'6' key
-      ship.usePanicBomb();
+    if (keyCode == 54) { //'6' key
+        ship.usePanicBomb();
     }
 
     if (score.gameInPlay() && !ship.crashed) {
@@ -92,7 +92,7 @@ function keyPressed() {
             ship.startThrust();
         } else if (keyCode == DOWN_ARROW) {
             //score.startNextLevel();
-            ship.reloadPanicBomb();
+            //ship.reloadPanicBomb();
 
         }
     }

@@ -46,11 +46,14 @@ function ScoreBoard() {
     }
 
     this.startNextLevel = function() {
-        //advances the found
+        //advances the round
         this.gameLevel += 1;
         this.fieldSize += floor(this.fieldSize / 2);
         this.explosiveAstTimer = this.gameTimer + floor(random(700, 1200));
         this.ufoTimer = this.gameTimer + floor(random(1200, 2000));
+
+        //reset ship capabilities
+        ship.reloadPanicBomb();
 
         //resets the score object
         this.gameWin = false;

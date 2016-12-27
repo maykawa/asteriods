@@ -75,7 +75,7 @@ function Ship() {
     }
 
     this.usePanicBomb = function() {
-        if (this.panicBomb) {
+        if (this.panicBomb && !this.crashed) {
             field.launchPanicBomb(this.pos);
             this.showPanicRing = true;
             this.panicBomb = false;
