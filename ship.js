@@ -15,7 +15,7 @@ function Ship() {
     this.panicRingSize = this.size * 20;
     this.panicBomb = true;
     this.showPanicRing = false;
-    this.panicRing = 30;
+    this.panicRingCounter = 30;
 
     this.update = function() {
         this.pos.add(this.velocity);
@@ -84,21 +84,21 @@ function Ship() {
 
     this.reloadPanicBomb = function() {
         this.showPanicRing = false;
-        this.panicRing = 30;
+        this.panicRingCounter = 30;
         this.panicBomb = true;
         console.log('panic bomb reloaded');
     }
 
     this.drawPanicRing = function() {
-        if (this.panicRing > 0) {
+        if (this.panicRingCounter > 0) {
             push()
-            fill(255, this.panicRing);
+            fill(255, this.panicRingCounter);
             stroke(this.shipColor);
             strokeWeight(1);
             //ellipse(0, 0, 200);
             ellipse(0, 0, this.panicRingSize);
             pop();
-            this.panicRing = this.panicRing - 1;
+            this.panicRingCounter = this.panicRingCounter - 1;
         }
     }
 

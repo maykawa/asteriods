@@ -102,11 +102,11 @@ function ScoreBoard() {
         } else if (this.gameOver) {
             translate(width / 2, height / 2);
             text("GAME OVER ", 0, 0);
-            text("score " + this.score, 0, 20);
+            text("score " + this.score + " at level "+this.gameLevel, 0, 20);
         } else if (this.gameWin) {
             translate(width / 2, height / 2);
             this.finishLevel();
-            text(">> LEVEL " + (this.gameLevel + 1) + " <<", 0, 0);
+            text(">>  LEVEL " + (this.gameLevel + 1) + "  <<", 0, 0);
             text("score " + this.score, 0, 20);
             text("PRESS 'S' TO BEGIN ", 0, 50);
         } else if (this.gamePaused) {

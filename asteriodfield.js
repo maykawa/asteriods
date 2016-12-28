@@ -4,26 +4,26 @@ function AsteriodField(num) {
     for (var i = 0; i < this.number; i++) {
         this.asteriods.push(new Asteriod());
     }
-    this.explosiveAsteriod = false;
 
+    this.setExplosiveAsteriod = false;
     this.introduceExplosiveAsteriod = function() {
-        this.explosiveAsteriod = true;
+        this.setExplosiveAsteriod = true;
     }
 
     this.update = function() {
         this.asteriods.forEach(updateAsteriods);
-    }
 
-    function updateAsteriods(a) {
-        a.update();
+        function updateAsteriods(a) {
+            a.update();
+        }
     }
 
     this.display = function() {
         this.asteriods.forEach(drawAsteriods);
-    }
 
-    function drawAsteriods(a) {
-        a.display();
+        function drawAsteriods(a) {
+            a.display();
+        }
     }
 
     this.explodeAllAsteriods = function() {
@@ -36,19 +36,12 @@ function AsteriodField(num) {
         }
     }
 
-    this.launchPanicBomb = function(locale) {
+    this.launchPanicBomb = function(shipPos) {
         for (var i = this.asteriods.length - 1; i >= 0; i--) {
-            //figure out if it is close to ship, then delete it
-            var d = dist(this.asteriods[i].pos.x, this.asteriods[i].pos.y, locale.x, locale.y);
-            if (d < (ship.size * 20)) {
-
-                if (this.asteriods[i].size > 10) {
-                    if (this.asteriods[i].explosive == true) {
-                        this.explodeAllAsteriods();
-                    } else {
-                        //var newAst = this.asteriods[i].breakup();
-                        //this.asteriods = this.asteriods.concat(newAst);
-                    }
+            var d = dist(this.asteriods[i].pos.x, this.asteriods[i].pos.y, shipPos.x, shipPos.y);
+            if (d < ship.panicRingSize) {
+                if (this.asteriods[i].explosive == true) {
+                    this.explodeAllAsteriods();
                 }
                 hitSound.play();
                 this.asteriods.splice(i, 1);
@@ -90,9 +83,9 @@ function AsteriodField(num) {
             this.explodeAllAsteriods();
         } else if (this.asteriods[i].size > 10) {
             var newAst = this.asteriods[i].breakup();
-            if (this.explosiveAsteriod) {
+            if (this.setExplosiveAsteriod) {
                 newAst[0].explosive = true;
-                this.explosiveAsteriod = false;
+                this.setExplosiveAsteriod = false;
             }
             this.asteriods = this.asteriods.concat(newAst);
         }
