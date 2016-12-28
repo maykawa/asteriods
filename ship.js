@@ -12,6 +12,11 @@ function Ship() {
     this.myLasers = [];
     this.myLaserField = new LaserField(1);
 
+    this.panicRingSize = this.size * 20;
+    this.panicBomb = true;
+    this.showPanicRing = false;
+    this.panicRing = 30;
+
     this.update = function() {
         this.pos.add(this.velocity);
         this.stayOnScreen();
@@ -69,6 +74,34 @@ function Ship() {
         }
     }
 
+    this.usePanicBomb = function() {
+        if (this.panicBomb && !this.crashed) {
+            field.launchPanicBomb(this.pos);
+            this.showPanicRing = true;
+            this.panicBomb = false;
+        }
+    }
+
+    this.reloadPanicBomb = function() {
+        this.showPanicRing = false;
+        this.panicRing = 30;
+        this.panicBomb = true;
+        console.log('panic bomb reloaded');
+    }
+
+    this.drawPanicRing = function() {
+        if (this.panicRing > 0) {
+            push()
+            fill(255, this.panicRing);
+            stroke(this.shipColor);
+            strokeWeight(1);
+            //ellipse(0, 0, 200);
+            ellipse(0, 0, this.panicRingSize);
+            pop();
+            this.panicRing = this.panicRing - 1;
+        }
+    }
+
     this.drawExplosion = function() {
         if (this.explodeRing > 0) {
             var dia = map(this.explodeRing, 255, 0, this.size * 2, 120);
@@ -104,6 +137,10 @@ function Ship() {
         rotate(this.heading);
         fill(0);
         stroke(this.shipColor);
+
+        if (this.showPanicRing) {
+            this.drawPanicRing();
+        }
 
         if (this.crashed) {
             if (!this.playExplosion) {

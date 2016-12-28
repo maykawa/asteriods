@@ -1,22 +1,28 @@
 function ScoreBoard() {
+
+    this.gameLevel = 1;
     this.score = 0
-    this.gamePaused = false;
-    this.gameStarted = false;
-    this.gameOver = false;
     this.gameTimer = 0;
+
+    this.gameStarted = false;
+    this.gamePaused = false;
+    this.gameOver = false;
     this.gameWin = false;
+
+    //Initial values reset for each level
+    this.fieldSize = 2; //starting number of asteriods
+    this.explosiveAstTimer = floor(random(700, 1200));
+    this.ufoTimer = floor(random(1200, 2000));
     this.fire = new FireWorkSky();
     this.winnerSoundPlayed = false;
-    this.gameLevel = 1;
 
-    var fieldSize;
-    var explosiveAstTimer;
-    var ufoTimer;
-
-    fieldSize = 10;
-    explosiveAstTimer = floor(random(700, 1200));
-    ufoTimer = floor(random(1200, 2000));
-
+    this.gameInPlay = function() {
+        if (this.gameStarted && !this.gamePaused) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 
     this.startGame = function() {
         if (!bedSound.isPlaying()) {
@@ -26,27 +32,38 @@ function ScoreBoard() {
         this.gameStarted = true;
     }
 
-    this.progressLevel = function() {
-        this.gameTimer += 1;
-
-        if (!this.gameOver && !this.gameWin) {
-            if (this.gameTimer == explosiveAstTimer) {
+    this.updateGame = function() {
+        if (!this.gameOver && !this.gameWin && !this.gamePaused) {
+            this.gameTimer += 1;
+            if (this.gameTimer == this.explosiveAstTimer) {
                 field.introduceExplosiveAsteriod();
             }
-            if (this.gameTimer == ufoTimer) {
+
+            if (this.gameTimer == this.ufoTimer) {
                 ufo.shipLaunch();
             }
         }
     }
 
-
     this.startNextLevel = function() {
-        //update game level -> increases number of asteriods
+        //advances the round
+        this.gameLevel += 1;
+        this.fieldSize += floor(this.fieldSize / 2);
+        this.explosiveAstTimer = this.gameTimer + floor(random(700, 1200));
+        this.ufoTimer = this.gameTimer + floor(random(1200, 2000));
 
-        //clear out old asteriod field
+        //reset ship capabilities
+        ship.reloadPanicBomb();
 
-        //create new ufo
+        //resets the score object
+        this.gameWin = false;
+        winnerSound.stop();
+        this.fire = new FireWorkSky();
+        this.winnerSoundPlayed = false;
 
+        //restart
+        window.resetGame();
+        this.startGame();
     }
 
     this.checkEndOfGame = function() {
@@ -55,6 +72,14 @@ function ScoreBoard() {
             this.gameWin = true;
             bedSound.stop();
         }
+    }
+
+    this.finishLevel = function() {
+        if (!this.winnerSoundPlayed) {
+            winnerSound.play();
+            this.winnerSoundPlayed = true;
+        }
+        this.fire.display();
     }
 
     this.endGame = function() {
@@ -67,45 +92,49 @@ function ScoreBoard() {
         this.score = this.score + amount;
     }
 
-    this.convertTimerToTime = function(t) {
-        //60FPS is default for p5.js
-        var secs = this.gameTimer / 60;
-        var mins = (secs / 60).toFixed(0);
-        var displaySecs = (secs % 60).toFixed(2);
-        return mins + ":" + displaySecs
-    }
-
     this.display = function() {
         push();
         textAlign(CENTER);
         fill(255);
         if (!this.gameStarted) {
-            translate(width / 2, height / 3);
-            text("PRESS 'S' TO BEGIN ", 0, 0);
+            translate(width / 2, height / 2);
+            text("PRESS 'S' TO BEGIN ", 0, 30);
         } else if (this.gameOver) {
             translate(width / 2, height / 2);
             text("GAME OVER ", 0, 0);
             text("score " + this.score, 0, 20);
         } else if (this.gameWin) {
             translate(width / 2, height / 2);
-            if (!this.winnerSoundPlayed) {
-                winnerSound.play();
-                this.winnerSoundPlayed = true;
-            }
-            this.fire.display();
-            text("YOU WIN !! ", 0, 0);
+            this.finishLevel();
+            text(">> LEVEL " + (this.gameLevel + 1) + " <<", 0, 0);
             text("score " + this.score, 0, 20);
+            text("PRESS 'S' TO BEGIN ", 0, 50);
         } else if (this.gamePaused) {
             translate(width / 2, height / 2);
             text("GAME PAUSED ", 0, 0);
         } else {
             textAlign(LEFT);
             translate(30, 25);
-            text("score: " + this.score + "   time: " + this.convertTimerToTime(), 0, 0);
+            text("level: " + this.gameLevel + "   score: " + this.score + "   time: " + this.convertTimerToTime(), 0, 0);
         }
         pop();
     }
+
+    this.convertTimerToTime = function(t) {
+        //60FPS is default for p5.js
+        var secs = this.gameTimer / 60;
+        var mins = (secs / 60).toFixed(0);
+        var displaySecs = (secs % 60).toFixed(2);
+        return mins + ":" + displaySecs;
+    }
+
 }
+
+
+
+
+///------------------
+
 
 function FireWorkSky() {
     this.blasts = [];
@@ -128,7 +157,7 @@ function FireWork() {
 
     this.explodeFireWork = function() {
         if (this.explodeRing > 0) {
-            var dia = map(this.explodeRing, 255, 0, this.size, 220);
+            var dia = map(this.explodeRing, 300, 0, this.size, 220);
             push()
             noFill();
 
