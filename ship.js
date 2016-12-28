@@ -10,7 +10,7 @@ function Ship() {
     this.playExplosion = false;
     this.explodeRing = 255;
     this.myLasers = [];
-    this.myLaserField = new LaserField(1);
+    this.myLaserField = new LaserField(this);
 
     this.panicRingSize = this.size * 20;
     this.panicBomb = true;
@@ -49,7 +49,7 @@ function Ship() {
 
     this.fireLaser = function() {
         fireSound.play();
-        this.myLaserField.shootLaser(this.pos, this.heading);
+        this.myLaserField.shootLaser(this.heading);
     }
 
     this.laserHit = function(laser) {
@@ -95,7 +95,6 @@ function Ship() {
             fill(255, this.panicRingCounter);
             stroke(this.shipColor);
             strokeWeight(1);
-            //ellipse(0, 0, 200);
             ellipse(0, 0, this.panicRingSize);
             pop();
             this.panicRingCounter = this.panicRingCounter - 1;

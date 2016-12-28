@@ -13,7 +13,7 @@ function Ufo() {
 
     this.courseChangeTimer = 0;
     this.fireTimer = 0;
-    this.myLaserField = new LaserField(2);
+    this.myLaserField = new LaserField(this);
 
 
     this.update = function() {
@@ -76,7 +76,7 @@ function Ufo() {
 
     this.fireLaser = function() {
         if (this.fireTimer > 25) {
-            this.myLaserField.shootLaser(this.pos);
+            this.myLaserField.shootLaser();
             this.fireTimer = 0;
         } else {
             this.fireTimer += 1;
