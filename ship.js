@@ -6,9 +6,11 @@ function Ship() {
     this.thrust = 0;
     this.velocity = createVector(0, 0);
     this.shipColor = color(47, 225, 253);
+
     this.crashed = false;
     this.playExplosion = false;
     this.explodeRing = 255;
+
     this.myLasers = [];
     this.myLaserField = new LaserField(this);
 
@@ -24,7 +26,6 @@ function Ship() {
         if (field.checkForCollision(this)) {
             this.explode();
         }
-
         if (this.crashed) {
             this.velocity.mult(0.95);
         } else {

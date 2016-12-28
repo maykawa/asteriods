@@ -1,7 +1,14 @@
+// asteriods: an old style video shooter game
+// original framework of the game provided by Daniel Shiffman
+// highly leverage P5.js libararies
+// sound files all taken from creative commons internet sources
+// the rest was all me, Matt Mayfeld, Dec 2016
+
 var ship;
 var ufo;
 var field;
 var score;
+
 var fireSound;
 var hitSound;
 var explodeSound;
@@ -22,14 +29,9 @@ function preload() {
 
 function setup() {
     createCanvas(windowWidth - 20, windowHeight - 20);
-
-    // fieldSize = 10;
-    // explosiveAstTimer = floor(random(700, 1200));
-    // ufoTimer = floor(random(1200, 2000));
-
-    score = new ScoreBoard(); //starts a new game
-    ship = new Ship();
+    score = new ScoreBoard(); //this first to start the game
     field = new AsteriodField(score.fieldSize);
+    ship = new Ship();
     ufo = new Ufo();
 }
 
@@ -40,7 +42,6 @@ function resetGame() {
 
 function draw() {
     background(0);
-
     if (score.gameInPlay()) {
         score.updateGame();
         field.update();
@@ -67,17 +68,17 @@ function keyPressed() {
         score.gamePaused = !score.gamePaused;
     }
 
-    if (keyCode == 83) { //'s' key
+    if (keyCode == 83) { //'s ' key
         if (!score.gameWin && !score.gameOver) {
             score.startGame();
-            console.log('start game');
+            console.log('  start game');
         } else if (score.gameInPlay() && score.gameWin) {
             score.startNextLevel();
             console.log('advance game');
         }
     }
 
-    if (keyCode == 54) { //'6' key
+    if (keyCode == 66) { //'b' key
         ship.usePanicBomb();
     }
 
@@ -93,7 +94,6 @@ function keyPressed() {
         } else if (keyCode == DOWN_ARROW) {
             //score.startNextLevel();
             //ship.reloadPanicBomb();
-
         }
     }
 }

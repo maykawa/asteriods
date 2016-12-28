@@ -1,8 +1,6 @@
 
-create game levels
 
 refactor ufo and ship from a vehicle prototype
-refactor laserfield from a field prototytpe
 
 create splash screen
 
